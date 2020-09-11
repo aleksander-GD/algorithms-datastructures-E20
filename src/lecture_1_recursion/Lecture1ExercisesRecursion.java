@@ -1,8 +1,10 @@
+package lecture_1_recursion;
+
 public class Lecture1ExercisesRecursion {
     public static void main(String[] args) {
         System.out.println("The sum of the first 10 natural numbers is : " + sum(10));
         System.out.println("The sum of the squares of the even numbers in the first 5 numbers is: " + evenSquare(4));
-        System.out.println("The fibonacci of 10 is: " + fib1(10));
+        System.out.println("The fibonacci of 10 is: " + fib(10));
         System.out.println("Find s in 'String': " + linear("string", 's', 5));
         System.out.println("Find x in 'String': " + linear("string", 'x', 5));
     }
@@ -18,7 +20,7 @@ public class Lecture1ExercisesRecursion {
 
     private static int evenSquare(int n) {
 
-        int even = 0;
+
         if (n == 0) {
             return n;
 
@@ -30,14 +32,14 @@ public class Lecture1ExercisesRecursion {
         }
     }
 
-    private static int fib1(int n) {
+    private static int fib(int n) {
         if (n == 0) // Base case
         {
             return 0;
         } else if (n == 1) {
             return 1;
         } else {
-            return fib1(n - 1) + fib1(n - 2);
+            return fib(n - 1) + fib(n - 2);
         }
 
     }
