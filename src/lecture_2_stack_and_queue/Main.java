@@ -17,7 +17,7 @@ public class Main {
         System.out.println( stackExercise.balancedPairBrackets("[["));
         System.out.println( stackExercise.balancedPairBrackets("]["));
         System.out.println( stackExercise.balancedPairBrackets("[]"));
-        System.out.println( stackExercise.balancedPairBrackets("[[]]"));
+        System.out.println( stackExercise.balancedPairBrackets("[[]]") + "\n");
 
         QueueExercise queueExercise = new QueueExercise();
 
@@ -34,5 +34,42 @@ public class Main {
         System.out.println(Arrays.toString(queueExercise.getQueue()));
         System.out.println(queueExercise.dequeue());
         System.out.println(Arrays.toString(queueExercise.getQueue()));
+        System.out.println("--------------------");
+        QueueExercise2 queueExercise2 = new QueueExercise2();
+
+        queueExercise2.enqueue(6);
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        queueExercise2.enqueue(9);
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        queueExercise2.enqueue(23);
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        queueExercise2.enqueue(10);
+        queueExercise2.enqueue(4);
+        queueExercise2.enqueue(44);
+        queueExercise2.enqueue(11);
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        queueExercise2.enqueue(1);
+        queueExercise2.enqueue(7);
+        queueExercise2.enqueue(4);
+        queueExercise2.enqueue(17);
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
+        System.out.println(Arrays.toString(queueExercise2.getQueue()));
+        System.out.println(queueExercise2.dequeue());
     }
 }
