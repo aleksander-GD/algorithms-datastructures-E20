@@ -13,6 +13,10 @@ public class Anagrams {
         System.out.println(checkIfAnagram("stale", "least"));
         System.out.println(checkIfAnagram("silent", "lissen"));
         System.out.println(checkIfAnagram("silent", "silents"));
+
+        System.out.println(isAnagram("stale", "least"));
+        System.out.println(isAnagram("silent", "lissen"));
+        System.out.println(isAnagram("silent", "silents"));
     }
 
     private static boolean checkIfAnagram(String word1, String word2) {
@@ -30,6 +34,17 @@ public class Anagrams {
             }
         }
         return true;
+    }
+
+    public static boolean isAnagram(String first, String second){
+        char[] firstArray =  first.trim().toLowerCase().toCharArray();
+        char[] secondArray = second.trim().toLowerCase().toCharArray();
+        Arrays.sort(firstArray);
+        Arrays.sort(secondArray);
+        if(new String(firstArray).equals(new String(secondArray))){
+            return true;
+        }
+        return false;
     }
 
 
