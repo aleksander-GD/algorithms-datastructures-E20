@@ -12,6 +12,8 @@ package lecture_4_binaryHeap;// BinaryHeap class
 // ******************ERRORS********************************
 // Throws UnderflowException as appropriate
 
+import mandatory_assignments.assignment1.UnderflowExeption;
+
 import java.util.Arrays;
 
 /**

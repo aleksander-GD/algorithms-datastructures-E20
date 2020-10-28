@@ -1,4 +1,4 @@
-package lecture_4_binaryHeap;
+package mandatory_assignments.assignment1;
 
 public class UnderflowExeption extends Exception {
 
