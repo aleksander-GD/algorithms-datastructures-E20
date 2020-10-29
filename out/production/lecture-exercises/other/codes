@@ -1,0 +1,27 @@
+TreeMap<Integer, Integer> dataXY = new TreeMap<>();
+        for (int k = 1000; k < numItems; k = k + 500) {
+            h.findKthminitem(k);
+            dataXY.put(k, h.getCounter());
+            h.resetCounter();
+            h.setCounter(initialBuildCount);
+            // Et tjek for at få worst case med i eksperimentet
+            if (k == 9500) {
+                h.setCounter(initialBuildCount);
+                h.findKthminitem(9999);
+                dataXY.put(9999, h.getCounter());
+            }
+        }
+
+        System.out.println(Arrays.asList(dataXY));
+        String eol = System.getProperty("line.separator");
+
+        try (FileWriter writer = new FileWriter("datafile.csv");) {
+            for (Map.Entry<Integer, Integer> entry : dataXY.entrySet()) {
+                writer.append(String.valueOf(entry.getKey()))
+                        .append(',')
+                        .append(String.valueOf(entry.getValue()))
+                        .append(eol);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }

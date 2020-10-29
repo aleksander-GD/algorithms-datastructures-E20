@@ -26,13 +26,13 @@ public class PriorityQueue {
         return this.counter;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
-
-
     public void resetCounter() {
         this.counter = 0;
+    }
+
+    public void setCounter(int c) {
+        this.counter = c;
+
     }
 
     public int[] getArray() {
@@ -100,11 +100,11 @@ public class PriorityQueue {
         array[hole] = tmp;
     }
 
-    private double calculateNLogN(int n) {
+    private static double calculateNLogN(int n) {
         return n * log(n, 2);
     }
 
-    private double log(int x, int base) {
+    private static double log(int x, int base) {
         return (Math.log(x) / Math.log(base));
     }
 
@@ -122,45 +122,69 @@ public class PriorityQueue {
     }
 
     // Test program
-    public static void main(String[] args) throws UnderflowExeption {
+    public static void main(String[] args) {
         int numItems = 10000;
-        PriorityQueue h;
-        Random random = new Random(System.currentTimeMillis());
-        int[] array = random.ints(numItems, 1, 500).toArray();
-
-        h = new PriorityQueue(array);
-
-        System.out.println("N*LogN: " + h.calculateNLogN(array.length));
-        int initialBuildCount = h.getCounter();
-        System.out.println("Initial build count: " + initialBuildCount);
-
+        int numberOfRuns = 100;
+        int testCasesForAverage = 20;
+        String eol = System.getProperty("line.separator");
         TreeMap<Integer, Integer> dataXY = new TreeMap<>();
-        for (int k = 1000; k < numItems; k = k + 500) {
-            h.findKthminitem(k);
-            dataXY.put(k, h.getCounter());
-            h.resetCounter();
-            h.setCounter(initialBuildCount);
-            // Et tjek for at få worst case med i eksperimentet
-            if (k == 9500) {
+        TreeMap<Integer, Double> nlognresult = new TreeMap<>();
+        ArrayList<Integer> data = new ArrayList<>();
+        dataXY.put(0,0); // Så det kan navngives i R, se evt. Rscript
+        nlognresult.put(0,0.0); // Så det kan navngives i R, se evt. Rscript
+        for (int i = 0; i <= numberOfRuns; i++) {
+            if (i > 0) {
+                System.out.println(Arrays.toString(data.toArray()));
+                System.out.println("numitems: " + numItems);
+                dataXY.put(numItems, data.stream()
+                        .mapToInt(a -> a)
+                        .sum() / data.size());
+                nlognresult.put(numItems, calculateNLogN(numItems));
+                numItems = numItems + 10000;
+                data.clear();
+            }
+            for (int j = 0; j <= testCasesForAverage; j++) {
+
+                Random random = new Random(System.currentTimeMillis());
+                int[] array = random.ints(numItems, 1, 500).toArray();
+
+                PriorityQueue h = new PriorityQueue(array);
+
+
+                int initialBuildCount = h.getCounter();
+                //System.out.println("Initial build count: " + initialBuildCount);
+                //h.findKthminitem(9999);
+                //System.out.println("counter output: " + h.getCounter());
+
+                h.findKthminitem(array.length - 1);
+                System.out.println(h.getCounter());
+                data.add(h.getCounter());
+                h.resetCounter();
                 h.setCounter(initialBuildCount);
-                h.findKthminitem(9999);
-                dataXY.put(9999, h.getCounter());
             }
         }
-
-        System.out.println(Arrays.asList(dataXY));
-        String eol = System.getProperty("line.separator");
-
-        try (FileWriter writer = new FileWriter("datafile.csv");) {
+        try (FileWriter writer = new FileWriter("dataNAverage.csv");
+             FileWriter writer2 = new FileWriter("dataNLogN.csv");) {
             for (Map.Entry<Integer, Integer> entry : dataXY.entrySet()) {
                 writer.append(String.valueOf(entry.getKey()))
                         .append(',')
                         .append(String.valueOf(entry.getValue()))
                         .append(eol);
             }
+            for (Map.Entry<Integer, Double> entry : nlognresult.entrySet()) {
+                writer2.append(String.valueOf(entry.getKey()))
+                        .append(',')
+                        .append(String.valueOf(entry.getValue()))
+                        .append(eol);
+            }
+
         } catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
+        System.out.println(Arrays.asList(dataXY));
+        System.out.println(Arrays.asList(nlognresult));
+
+
     }
 }
 

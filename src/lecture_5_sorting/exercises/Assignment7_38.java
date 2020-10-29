@@ -23,6 +23,13 @@ public class Assignment7_38 {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}
     };*/
+
+    /**
+     * We have some points on a plane, we need to find which ones belongs to the same line
+     * Its N^4 because we need to find 4 elements.
+     *
+     * (dump) For the first two elements find angle. Check every single slope
+     */
     private static int[][] plane;
 
     public static void main(String[] args) {
