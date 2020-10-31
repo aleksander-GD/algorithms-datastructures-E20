@@ -1,7 +1,3 @@
-install.packages("ggplot")
-install.packages("ggplot2")
-library(ggplot2)
-library(ggplot)
 # Problem 1
 home = setwd(Sys.getenv("HOME"));
 fpath = file.path(home);
@@ -21,15 +17,15 @@ names(dataNLogN)[names(dataNLogN) == "X0"] <- "N"
 names(dataNLogN)[names(dataNLogN) == "X0.0"] <- "NlogN"
 head(dataNLogN)
 
-plot(x=dataNLogNAverage$N, y=dataNLogNAverage$counts, type = "l", xlab = "count", ylab = "N size", col="blue")
-legend("topleft",c("counter"),fill=c("blue"))
-plot(x=dataNLogN$N, y=dataNLogN$NlogN, type = "l", xlab = "O(N*LogN)", ylab = "N size", col="red")
-#lines(x=dataNLogN$N, y=dataNLogN$NlogN, type = "l", col="red")
-
+plot(x=dataNLogNAverage$N, y=dataNLogNAverage$counts, type = "l", xlab = "count average", ylab = "N size", col="blue")
 reg <- lm(counts~N, data = dataNLogNAverage)
 abline(reg, col="orange")
-legend("topleft",c("regression","O(N*logN)"),fill=c("orange","red"))
 summary(reg)
+legend("topleft",c("regression","counter"),fill=c("orange","blue"))
+
+plot(x=dataNLogN$N, y=dataNLogN$NlogN, type = "l", xlab = "O(N*LogN)", ylab = "N size", col="red")
+legend("topleft",c("O(N*logN)"),fill=c("red"))
+
 
 # Problem 2
 
@@ -47,16 +43,14 @@ names(dataN)[names(dataN) == "X0"] <- "N"
 names(dataN)[names(dataN) == "X0.1"] <- "cN"
 head(dataN)
 
-plot(x=dataNAverage$N, y=dataNAverage$counts, type = "l", xlab = "count", ylab = "N size", col="blue")
-plot(x=dataN$N, y=dataN$cN, , type = "l", xlab = "O(N)", ylab = "N size", col="red")
-
+plot(x=dataNAverage$N, y=dataNAverage$counts, type = "l", xlab = "count average", ylab = "N size", col="blue")
 reg<-lm(counts ~ N, data = dataNAverage)
-coeff=coefficients(reg)
-eq = paste0("y = ", round(coeff[2],1), "*x ", round(coeff[1],1))
+#coeff=coefficients(reg)
+#eq = paste0("y = ", round(coeff[2],1), "*x ", round(coeff[1],1))
 abline(reg, col="orange")
-legend("topleft",c("counter","O(N)", "linear regression on counter"),fill=c("blue","red", "orange"))
+legend("topleft",c("counter", "regression"),fill=c("blue","orange"))
 resid(reg)
 plot(resid(reg))
 summary(reg)
-#fit <- lm(dataNAverage$N~dataNAverage$counts, data=dataNAverage)
-#lines(dataNAverage$N, fitted(fit), col="orange")
+
+plot(x=dataN$N, y=dataN$cN, type = "l", xlab = "O(N)", ylab = "N size", col="red")
