@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class PriorityQueue {
-    private static final int DEFAULT_CAPACITY = 10;
-
-    private int currentSize;      // Number of elements in heap
-    private int[] array; // The heap array
+    private int currentSize;
+    private int[] array;
     private int counter;
 
     public PriorityQueue(int[] items) {
@@ -30,10 +28,7 @@ public class PriorityQueue {
         this.counter = 0;
     }
 
-    public void setCounter(int c) {
-        this.counter = c;
-
-    }
+    public void setCounter(int c) {this.counter = c; }
 
     public int[] getArray() {
         return this.array;
@@ -108,10 +103,6 @@ public class PriorityQueue {
         return (Math.log(x) / Math.log(base));
     }
 
-    private static String printArray(int[] arr) {
-        return Arrays.toString(arr);
-    }
-
     @Override
     public String toString() {
         return "PriorityQueue{" +
@@ -125,7 +116,7 @@ public class PriorityQueue {
     public static void main(String[] args) {
         int numItems = 10000;
         int numberOfRuns = 100;
-        int testCasesForAverage = 20;
+        int testCasesForAverage = 30;
         String eol = System.getProperty("line.separator");
         TreeMap<Integer, Integer> dataXY = new TreeMap<>();
         TreeMap<Integer, Double> nlognresult = new TreeMap<>();
@@ -163,7 +154,7 @@ public class PriorityQueue {
                 h.setCounter(initialBuildCount);
             }
         }
-        try (FileWriter writer = new FileWriter("dataNAverage.csv");
+        try (FileWriter writer = new FileWriter("dataNLogNAverage.csv");
              FileWriter writer2 = new FileWriter("dataNLogN.csv");) {
             for (Map.Entry<Integer, Integer> entry : dataXY.entrySet()) {
                 writer.append(String.valueOf(entry.getKey()))

@@ -1,8 +1,8 @@
 package mandatory_assignments.assignment1;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.TreeMap;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class QuickSelect2 {
     private final int CUTOFF = 10;
@@ -88,28 +88,72 @@ public class QuickSelect2 {
 
     public static void main(String[] args) {
 
-        int numItems = 1000;
-        Random random = new Random(System.currentTimeMillis());
-        int[] array = random.ints(numItems, 1, 1000).toArray();
+        int numItems = 10000;
+        int numberOfRuns = 150;
+        int testCasesForAverage = 100;
+    String eol = System.getProperty("line.separator");
+        TreeMap<Integer, Integer> dataXY = new TreeMap<>();
+        TreeMap<Integer, Integer> nResult = new TreeMap<>();
+        ArrayList<Integer> data = new ArrayList<>();
+        dataXY.put(0,0); // Så det kan navngives i R, se evt. Rscript
+        nResult.put(0,0); // Så det kan navngives i R, se evt. Rscript
+        for (int i = 0; i <= numberOfRuns; i++) {
+            if (i > 0) {
+                System.out.println(Arrays.toString(data.toArray()));
+                System.out.println("numitems: " + numItems);
+                System.out.println("k = N size/2 := " + numItems/2);
+                dataXY.put(numItems, data.stream()
+                        .mapToInt(a -> a)
+                        .sum() / data.size());
+                nResult.put(numItems, numItems);
+                numItems = numItems + 10000;
+                data.clear();
+            }
+            for (int j = 0; j <= testCasesForAverage; j++) {
+
+                Random random = new Random(System.currentTimeMillis());
+                int[] array = random.ints(numItems, 1, 500).toArray();
+
+                QuickSelect2 qs = new QuickSelect2();
+
+                qs.quickSelect(array, 0, array.length - 1, numItems/2);
+
+                //System.out.println(qs.getCounter());
+                data.add(qs.getCounter());
+                qs.resetCounter();
+            }
+        }
+        try (FileWriter writer = new FileWriter("dataNAverage.csv");
+             FileWriter writer2 = new FileWriter("dataN.csv");) {
+            for (Map.Entry<Integer, Integer> entry : dataXY.entrySet()) {
+                writer.append(String.valueOf(entry.getKey()))
+                        .append(',')
+                        .append(String.valueOf(entry.getValue()))
+                        .append(eol);
+            }
+            for (Map.Entry<Integer, Integer> entry : nResult.entrySet()) {
+                writer2.append(String.valueOf(entry.getKey()))
+                        .append(',')
+                        .append(String.valueOf(entry.getValue()))
+                        .append(eol);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        System.out.println(Arrays.asList(dataXY));
+        System.out.println(Arrays.asList(nResult));
         //System.out.println(Arrays.toString(array));
-        QuickSelect2 qs = new QuickSelect2();
-        int[] testarray = {1, 5, 2, 7, 4, 9, 11, 10, 3, 9, 66, 44, 88, 6};
+        //QuickSelect2 qs = new QuickSelect2();
+        //int[] testarray = {1, 5, 2, 7, 4, 9, 11, 10, 3, 9, 66, 44, 88, 6};
         //System.out.println(Arrays.toString(testarray));
         //System.out.println(qs.quickSelect(testarray, 0, testarray.length - 1, 12));
 
-        System.out.println(qs.quickSelect(array, 0, array.length - 1, numItems/2));
+        //System.out.println(qs.quickSelect(array, 0, array.length - 1, numItems/2));
 
 
-        System.out.println(qs.getCounter());
+        //System.out.println(qs.getCounter());
         //System.out.println(Arrays.toString(array));
         //System.out.println(Arrays.toString(testarray));
-        /*qs.resetCounter();
-        TreeMap<Integer, Integer> dataXY = new TreeMap<>();
-        for (int k = 1000; k < numItems; k = k + 1000) {
-            qs.quickSelect(array, 0, array.length - 1, k);
-            dataXY.put(k, qs.getCounter());
-            qs.resetCounter();
-        }
-        System.out.println(Arrays.asList(dataXY));*/
     }
 }
