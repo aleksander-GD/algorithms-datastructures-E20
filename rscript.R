@@ -17,13 +17,13 @@ names(dataNLogN)[names(dataNLogN) == "X0"] <- "N"
 names(dataNLogN)[names(dataNLogN) == "X0.0"] <- "NlogN"
 head(dataNLogN)
 
-plot(x=dataNLogNAverage$N, y=dataNLogNAverage$counts, type = "l", xlab = "count average", ylab = "N size", col="blue")
+plot(x=dataNLogNAverage$N, y=dataNLogNAverage$counts, type = "l", xlab = "N size", ylab = "count average", col="blue")
 reg <- lm(counts~N, data = dataNLogNAverage)
 abline(reg, col="orange")
 summary(reg)
 legend("topleft",c("regression","counter"),fill=c("orange","blue"))
 
-plot(x=dataNLogN$N, y=dataNLogN$NlogN, type = "l", xlab = "O(N*LogN)", ylab = "N size", col="red")
+plot(x=dataNLogN$N, y=dataNLogN$NlogN, type = "l", xlab = "N size", ylab = "O(N*LogN)", col="red")
 legend("topleft",c("O(N*logN)"),fill=c("red"))
 
 
@@ -43,7 +43,7 @@ names(dataN)[names(dataN) == "X0"] <- "N"
 names(dataN)[names(dataN) == "X0.1"] <- "cN"
 head(dataN)
 
-plot(x=dataNAverage$N, y=dataNAverage$counts, type = "l", xlab = "count average", ylab = "N size", col="blue")
+plot(x=dataNAverage$N, y=dataNAverage$counts, type = "l", xlab = "N size", ylab = "count average", col="blue")
 reg<-lm(counts ~ N, data = dataNAverage)
 #coeff=coefficients(reg)
 #eq = paste0("y = ", round(coeff[2],1), "*x ", round(coeff[1],1))
@@ -53,4 +53,4 @@ resid(reg)
 plot(resid(reg))
 summary(reg)
 
-plot(x=dataN$N, y=dataN$cN, type = "l", xlab = "O(N)", ylab = "N size", col="red")
+plot(x=dataN$N, y=dataN$cN, type = "l", xlab = "N size", ylab = "O(N)", col="red")

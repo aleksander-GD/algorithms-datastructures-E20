@@ -84,9 +84,9 @@ public class QuickSelect {
         QuickSelect qs = new QuickSelect();
         int[] testarray = {1, 5, 2, 7, 4, 9, 11, 10, 3, 9, 66, 44, 88, 6};
         System.out.println(Arrays.toString(testarray));
-        //System.out.println(qs.quickSelect(testarray, 0, testarray.length - 1, 12));
-        System.out.println(qs.quickSelect(array, 0, array.length - 1, 1));
-        System.out.println(qs.getCounter());
-        System.out.println(Arrays.toString(testarray));
+        //System.out.println(qs.quickSelect(tesSystem.out.println(qs.quickSelect(array, 0, array.length - 1, 1));
+        //        System.out.println(qs.getCounter());
+        //        System.out.println(Arrays.toString(testarray));tarray, 0, testarray.length - 1, 12));
+
     }
 }

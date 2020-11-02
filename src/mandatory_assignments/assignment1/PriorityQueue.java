@@ -103,6 +103,12 @@ public class PriorityQueue {
         return (Math.log(x) / Math.log(base));
     }
 
+    public static int[] randomNumbers (int size, int from, int to){
+        Random random = new Random(System.currentTimeMillis());
+        int[] array = random.ints(size, from, to).toArray();
+        return array;
+    }
+
     @Override
     public String toString() {
         return "PriorityQueue{" +
@@ -135,12 +141,8 @@ public class PriorityQueue {
                 data.clear();
             }
             for (int j = 0; j <= testCasesForAverage; j++) {
-
-                Random random = new Random(System.currentTimeMillis());
-                int[] array = random.ints(numItems, 1, 500).toArray();
-
+                int[] array = randomNumbers(numItems,1,500);
                 PriorityQueue h = new PriorityQueue(array);
-
 
                 int initialBuildCount = h.getCounter();
                 //System.out.println("Initial build count: " + initialBuildCount);
