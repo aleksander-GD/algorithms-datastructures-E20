@@ -54,3 +54,4 @@ plot(resid(reg))
 summary(reg)
 
 plot(x=dataN$N, y=dataN$cN, type = "l", xlab = "N size", ylab = "O(N)", col="red")
+legend("topleft",c("O(N)"),fill=c("red"))

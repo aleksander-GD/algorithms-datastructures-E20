@@ -1,6 +1,5 @@
 package mandatory_assignments.assignment1;
 
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -28,7 +27,9 @@ public class PriorityQueue {
         this.counter = 0;
     }
 
-    public void setCounter(int c) {this.counter = c; }
+    public void setCounter(int c) {
+        this.counter = c;
+    }
 
     public int[] getArray() {
         return this.array;
@@ -95,89 +96,46 @@ public class PriorityQueue {
         array[hole] = tmp;
     }
 
-    private static double calculateNLogN(int n) {
-        return n * log(n, 2);
-    }
-
-    private static double log(int x, int base) {
-        return (Math.log(x) / Math.log(base));
-    }
-
-    public static int[] randomNumbers (int size, int from, int to){
-        Random random = new Random(System.currentTimeMillis());
-        int[] array = random.ints(size, from, to).toArray();
-        return array;
-    }
-
-    @Override
-    public String toString() {
-        return "PriorityQueue{" +
-                "currentSize=" + currentSize +
-                ", array=" + Arrays.toString(array) +
-                ", counter=" + counter +
-                '}';
-    }
-
     // Test program
     public static void main(String[] args) {
+
         int numItems = 10000;
         int numberOfRuns = 100;
-        int testCasesForAverage = 30;
-        String eol = System.getProperty("line.separator");
+        int testCasesForAverage = 100;
+        Utility u = new Utility();
         TreeMap<Integer, Integer> dataXY = new TreeMap<>();
         TreeMap<Integer, Double> nlognresult = new TreeMap<>();
         ArrayList<Integer> data = new ArrayList<>();
-        dataXY.put(0,0); // Så det kan navngives i R, se evt. Rscript
-        nlognresult.put(0,0.0); // Så det kan navngives i R, se evt. Rscript
+        dataXY.put(0, 0); // Så det kan navngives i R, se evt. Rscript
+        nlognresult.put(0, 0.0); // Så det kan navngives i R, se evt. Rscript
         for (int i = 0; i <= numberOfRuns; i++) {
             if (i > 0) {
                 System.out.println(Arrays.toString(data.toArray()));
                 System.out.println("numitems: " + numItems);
+                System.out.println("k = N size - 1 :=  " + (numItems - 1));
+                System.out.println("Average: " + data.stream().mapToInt(a -> a).sum() / data.size());
                 dataXY.put(numItems, data.stream()
                         .mapToInt(a -> a)
                         .sum() / data.size());
-                nlognresult.put(numItems, calculateNLogN(numItems));
+                nlognresult.put(numItems, u.calculateNLogN(numItems));
                 numItems = numItems + 10000;
                 data.clear();
             }
             for (int j = 0; j <= testCasesForAverage; j++) {
-                int[] array = randomNumbers(numItems,1,500);
+                int[] array = u.randomNumbers(numItems);
                 PriorityQueue h = new PriorityQueue(array);
-
                 int initialBuildCount = h.getCounter();
-                //System.out.println("Initial build count: " + initialBuildCount);
-                //h.findKthminitem(9999);
-                //System.out.println("counter output: " + h.getCounter());
-
                 h.findKthminitem(array.length - 1);
-                System.out.println(h.getCounter());
                 data.add(h.getCounter());
                 h.resetCounter();
                 h.setCounter(initialBuildCount);
             }
         }
-        try (FileWriter writer = new FileWriter("dataNLogNAverage.csv");
-             FileWriter writer2 = new FileWriter("dataNLogN.csv");) {
-            for (Map.Entry<Integer, Integer> entry : dataXY.entrySet()) {
-                writer.append(String.valueOf(entry.getKey()))
-                        .append(',')
-                        .append(String.valueOf(entry.getValue()))
-                        .append(eol);
-            }
-            for (Map.Entry<Integer, Double> entry : nlognresult.entrySet()) {
-                writer2.append(String.valueOf(entry.getKey()))
-                        .append(',')
-                        .append(String.valueOf(entry.getValue()))
-                        .append(eol);
-            }
+        u.writeCSVInt("dataNLogNAverage", dataXY);
+        u.writeCSVDouble("dataNLogN", nlognresult);
 
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
         System.out.println(Arrays.asList(dataXY));
         System.out.println(Arrays.asList(nlognresult));
-
-
     }
 }
 

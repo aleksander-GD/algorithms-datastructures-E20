@@ -1,7 +1,6 @@
 package mandatory_assignments.assignment1;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class QuickSelect {
     private final int CUTOFF = 10;
@@ -11,21 +10,28 @@ public class QuickSelect {
         return counter;
     }
 
-    private int quickSelect(int[] a, int left, int right, int k) {
+    public void resetCounter() {
+        this.counter = 0;
+    }
 
-        if (left + CUTOFF <= right) {
+    private int quickSelectForSmallestKth(int[] a, int left, int right, int k) {
+        if (left + CUTOFF > right) {
+            insertionSort(a, left, right);
+        } else {
             int pivot = median3(a, left, right);
 
             // Begin partitioning
-            int i, j;
-            for (i = left, j = right - 1; ; ) {
-                counter++;
-                while (a[++i] < pivot)
+            int i = left, j = right - 1;
+            while (true) {
+                while (a[++i] < pivot) {
                     counter++;
-                while (pivot < a[--j])
+                }
+                while (a[--j] > pivot) {
                     counter++;
-                if (i >= j)
+                }
+                if (i >= j) {
                     break;
+                }
                 swapReferences(a, i, j);
             }
 
@@ -33,20 +39,21 @@ public class QuickSelect {
             swapReferences(a, i, right - 1);
 
             // Recurse; only this part changes
-            if (k <= i)
-                quickSelect(a, left, i - 1, k);
-            else if (k > i + 1)
-                quickSelect(a, i + 1, right, k);
-        } else {
-            // Do an insertion sort on the subarray
-            insertionSort(a, left, right);
+            if (k == pivot) {
+                return a[k - 1];
+            }
+            if (k <= i) {
+                quickSelectForSmallestKth(a, left, i - 1, k);
+            } else if (k > i + 1) {
+                quickSelectForSmallestKth(a, i + 1, right, k);
 
+            }
+            return a[k - 1];
         }
         return a[k - 1];
-
     }
+
     private int median3(int[] a, int left, int right) {
-        counter++;
         int center = (left + right) / 2;
         if (a[center] < a[left])
             swapReferences(a, left, center);
@@ -60,33 +67,71 @@ public class QuickSelect {
     }
 
     private void swapReferences(int[] array, int a, int b) {
+        counter++;
         int tmp = array[a];
         array[a] = array[b];
         array[b] = tmp;
     }
 
-    public void insertionSort(int[] a, int low, int high) {
-        for (int p = low + 1; p <= high; p++) {
+    public void insertionSort(int[] a, int left, int right) {
+        for (int p = left + 1; p <= right; p++) {
             int tmp = a[p];
             int j;
 
-            for (j = p; j > low && tmp < a[j - 1]; j--)
+            for (j = p; j > left && tmp < a[j - 1]; j--) {
                 a[j] = a[j - 1];
+                counter++;
+            }
             a[j] = tmp;
+            counter++;
         }
     }
+
     public static void main(String[] args) {
 
         int numItems = 10000;
-        Random random = new Random(System.currentTimeMillis());
-        int[] array = random.ints(numItems, 1, 5000).toArray();
+        int numberOfRuns = 150;
+        int testCasesForAverage = 300;
 
-        QuickSelect qs = new QuickSelect();
-        int[] testarray = {1, 5, 2, 7, 4, 9, 11, 10, 3, 9, 66, 44, 88, 6};
-        System.out.println(Arrays.toString(testarray));
-        //System.out.println(qs.quickSelect(tesSystem.out.println(qs.quickSelect(array, 0, array.length - 1, 1));
-        //        System.out.println(qs.getCounter());
-        //        System.out.println(Arrays.toString(testarray));tarray, 0, testarray.length - 1, 12));
+        Utility u = new Utility();
+        TreeMap<Integer, Integer> dataXY = new TreeMap<>();
+        TreeMap<Integer, Integer> nResult = new TreeMap<>();
+        ArrayList<Integer> data = new ArrayList<>();
+        dataXY.put(0, 0); // Så det kan navngives i R, se evt. Rscript
+        nResult.put(0, 0); // Så det kan navngives i R, se evt. Rscript
 
+        for (int i = 0; i <= numberOfRuns; i++) {
+            if (i > 0) {
+                System.out.println(Arrays.toString(data.toArray()));
+                System.out.println("numitems: " + numItems);
+                System.out.println("k = N size/2 := " + numItems / 2);
+                System.out.println("Average: " + data.stream().mapToInt(a -> a).sum() / data.size());
+                dataXY.put(numItems, data.stream()
+                        .mapToInt(a -> a)
+                        .sum() / data.size());
+                nResult.put(numItems, numItems);
+                numItems = numItems + 10000;
+                data.clear();
+            }
+            for (int j = 0; j <= testCasesForAverage; j++) {
+                QuickSelect qs = new QuickSelect();
+                int[] array = u.randomNumbers(numItems);
+                qs.quickSelectForSmallestKth(array, 0, array.length - 1, numItems / 2);
+                data.add(qs.getCounter());
+                qs.resetCounter();
+            }
+        }
+        u.writeCSVInt("dataNAverage", dataXY);
+        u.writeCSVInt("dataN", nResult);
+
+        //QuickSelect2 qs = new QuickSelect2();
+        //int[] testarray = {1, 66, 2, 7, 4, 9, 11, 10, 3, 99, 77, 44, 88, 102, 555, 5, 111, 444};
+        //System.out.println(qs.quickSelectForSmallestKth(testarray, 0, testarray.length - 1, 11));
+        //System.out.println(Arrays.toString(qs.randomNumbers(1000)));
+        //Arrays.sort(testarray);
+        //System.out.println(Arrays.toString(testarray));
+
+        /*System.out.println(Arrays.asList(dataXY));
+        System.out.println(Arrays.asList(nResult)); // 1 2 3 4 5 7 9 10 11 44*/
     }
 }
