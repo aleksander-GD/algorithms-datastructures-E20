@@ -216,13 +216,29 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
             printTree(t.right);
         }
     }
-    void printTree(BinaryNode<AnyType> node, String prefix)
-    {
-        if(node == null) return;
 
-        System.out.println(prefix + "+ " + node.data);
-        printTree(node.left, prefix + prefixChar);
-        printTree(node.right, prefix + prefixChar);
+    public void createPerfectBinarySearchTree(AnyType x) {
+        root = createPerfectBinarySearchTree(root, x);
+    }
+
+    public BinaryNode<AnyType> createPerfectBinarySearchTree(BinaryNode<AnyType> node, AnyType ele) {
+
+        if (node == null)
+            return new BinaryNode<>(ele, null, null);
+
+        int compareResult = ele.compareTo(node.element);
+
+        if (node.left == null && node.right == null) {
+            if (compareResult > 0) {
+                node.right = insert(ele, node.right);
+
+            } else {
+                node.left = insert(ele, node.left);
+            }
+        } else {
+            ;
+        } // Duplicate; do nothing
+        return node;
     }
 
     public void preorder(BinaryNode<AnyType> node) {
@@ -232,8 +248,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
         System.out.println(node.element);
         preorder(node.left);
         preorder(node.right);
-
-
     }
 
     public void postorder(BinaryNode<AnyType> node) {
@@ -261,11 +275,12 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
             return 0;
         return internalPathLength(node.left, depth + 1) + internalPathLength(node.right, depth + 1) + depth;
     }
-    public int internalPathLength()
-    {
+
+    public int internalPathLength() {
         return internalPathLength(root, 0);
     }
-    private BinaryNode find(Comparable x, BinaryNode t) {
+
+    private BinaryNode find(AnyType x, BinaryNode<AnyType> t) {
         while (t != null) {
             if (x.compareTo(t.element) < 0)
                 t = t.left;
@@ -274,7 +289,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
             else
                 return t;    // Match
         }
-
         return null;         // Not found
     }
 
@@ -317,13 +331,14 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
     // Test program
     public static void main(String[] args) {
         BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-        final int NUMS = 20;
-        final int GAP = 1;
+        final int NUMS = 50;
+        final int GAP = 37;
 
         System.out.println("Checking... (no more output means success)");
 
         for (int i = GAP; i != 0; i = (i + GAP) % NUMS)
             bst.insert(i);
+            //bst.createPerfectBinarySearchTree(i);
 
         for (int i = 1; i < NUMS; i += 2)
             bst.remove(i);

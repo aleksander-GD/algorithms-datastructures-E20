@@ -90,7 +90,7 @@ public class QuickSelect {
     public static void main(String[] args) {
 
         int numItems = 10000;
-        int numberOfRuns = 150;
+        int numberOfRuns = 200;
         int testCasesForAverage = 300;
 
         Utility u = new Utility();
@@ -131,7 +131,7 @@ public class QuickSelect {
         //Arrays.sort(testarray);
         //System.out.println(Arrays.toString(testarray));
 
-        /*System.out.println(Arrays.asList(dataXY));
-        System.out.println(Arrays.asList(nResult)); // 1 2 3 4 5 7 9 10 11 44*/
+        System.out.println(Arrays.asList(dataXY));
+        System.out.println(Arrays.asList(nResult));
     }
 }
