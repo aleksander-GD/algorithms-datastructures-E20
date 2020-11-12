@@ -1,7 +1,5 @@
 package mandatory_assignments.assignment1;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 public class PriorityQueue {
@@ -100,8 +98,8 @@ public class PriorityQueue {
     public static void main(String[] args) {
 
         int numItems = 10000;
-        int numberOfRuns = 100;
-        int testCasesForAverage = 100;
+        int numberOfRuns = 400;
+        int testCasesForAverage = 20;
         Utility u = new Utility();
         TreeMap<Integer, Integer> dataXY = new TreeMap<>();
         TreeMap<Integer, Double> nlognresult = new TreeMap<>();

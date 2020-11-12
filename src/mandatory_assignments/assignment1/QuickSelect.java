@@ -20,7 +20,7 @@ public class QuickSelect {
         } else {
             int pivot = median3(a, left, right);
 
-            // Begin partitioning
+            // Patitioneringen sker her
             int i = left, j = right - 1;
             while (true) {
                 while (a[++i] < pivot) {
@@ -123,13 +123,6 @@ public class QuickSelect {
         }
         u.writeCSVInt("dataNAverage", dataXY);
         u.writeCSVInt("dataN", nResult);
-
-        //QuickSelect2 qs = new QuickSelect2();
-        //int[] testarray = {1, 66, 2, 7, 4, 9, 11, 10, 3, 99, 77, 44, 88, 102, 555, 5, 111, 444};
-        //System.out.println(qs.quickSelectForSmallestKth(testarray, 0, testarray.length - 1, 11));
-        //System.out.println(Arrays.toString(qs.randomNumbers(1000)));
-        //Arrays.sort(testarray);
-        //System.out.println(Arrays.toString(testarray));
 
         System.out.println(Arrays.asList(dataXY));
         System.out.println(Arrays.asList(nResult));
