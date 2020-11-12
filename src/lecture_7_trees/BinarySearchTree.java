@@ -17,6 +17,10 @@ package lecture_7_trees;
 
 import org.omg.CORBA.Any;
 
+import java.util.ArrayDeque;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Implements an unbalanced binary search tree.
  * Note that all "matching" is based on the compareTo method.
@@ -217,62 +221,97 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
         }
     }
 
-    public void createPerfectBinarySearchTree(AnyType x) {
-        root = createPerfectBinarySearchTree(root, x);
+
+    public void createPerfectBinarySearchTree(AnyType[] sortedArray) {
+        root = createPerfectBinarySearchTree(sortedArray, 0, sortedArray.length - 1);
     }
 
-    public BinaryNode<AnyType> createPerfectBinarySearchTree(BinaryNode<AnyType> node, AnyType ele) {
+    public BinaryNode<AnyType> createPerfectBinarySearchTree(AnyType[] sortedArray, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = (start + end) / 2;
+        BinaryNode node = new BinaryNode(sortedArray[mid]);
 
-        if (node == null)
-            return new BinaryNode<>(ele, null, null);
+        /* Recursively construct the left subtree and make it
+         left child of root */
+        node.left = createPerfectBinarySearchTree(sortedArray, start, mid - 1);
 
-        int compareResult = ele.compareTo(node.element);
+        /* Recursively construct the right subtree and make it
+         right child of root */
+        node.right = createPerfectBinarySearchTree(sortedArray, mid + 1, end);
 
-        if (node.left == null && node.right == null) {
-            if (compareResult > 0) {
-                node.right = insert(ele, node.right);
-
-            } else {
-                node.left = insert(ele, node.left);
-            }
-        } else {
-            ;
-        } // Duplicate; do nothing
         return node;
     }
 
+
     public void preorder(BinaryNode<AnyType> node) {
-        if (node == null) {
-            return;
+        if (node != null) {
+            System.out.println(node.element);
+            preorder(node.left);
+            preorder(node.right);
         }
-        System.out.println(node.element);
-        preorder(node.left);
-        preorder(node.right);
     }
 
     public void postorder(BinaryNode<AnyType> node) {
-        if (node == null) {
-            return;
+        if (node != null) {
+            preorder(node.left);
+            preorder(node.right);
+            System.out.println(node.element);
         }
-        preorder(node.left);
-        preorder(node.right);
-        System.out.println(node.element);
+
     }
 
     public void inorder(BinaryNode<AnyType> node) {
-        if (node == null) {
-            return;
+        if (node != null) {
+            preorder(node.left);
+            System.out.println(node.element);
+            preorder(node.right);
         }
-        preorder(node.left);
-        System.out.println(node.element);
-        preorder(node.right);
+
+    }
+
+    LinkedList<AnyType> level_order_values = new LinkedList<>();
+
+    public void levelOrder(BinaryNode<AnyType> node) {
+        Queue<BinaryNode<AnyType>> list = new LinkedList<>();
+        list.add(node);
+        while (!list.isEmpty()) {
+            BinaryNode tempnode = list.poll();
+            System.out.println(tempnode.element);
+            if (tempnode.left != null) {
+                list.add(tempnode.left);
+            }
+            if (tempnode.right != null) {
+                list.add(tempnode.right);
+            }
+        }
+    }
+
+    public Queue<BinaryNode<AnyType>> getLevelOrder(BinaryNode<AnyType> node) {
+        Queue<BinaryNode<AnyType>> list = new LinkedList<>();
+        Queue<BinaryNode<AnyType>> levelOrderList = new LinkedList<>();
+        list.add(node);
+        while (!list.isEmpty()) {
+            BinaryNode<AnyType> tempnode = list.poll();
+            levelOrderList.add(tempnode);
+            if (tempnode.left != null) {
+                list.add(tempnode.left);
+            }
+            if (tempnode.right != null) {
+                list.add(tempnode.right);
+            }
+        }
+        return list;
     }
 
     private int sum = 0;
 
     private int internalPathLength(BinaryNode<AnyType> node, int depth) {
-        if (node == null)
+
+        if (node == null) {
             return 0;
+        }
         return internalPathLength(node.left, depth + 1) + internalPathLength(node.right, depth + 1) + depth;
     }
 
@@ -280,17 +319,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
         return internalPathLength(root, 0);
     }
 
-    private BinaryNode find(AnyType x, BinaryNode<AnyType> t) {
-        while (t != null) {
-            if (x.compareTo(t.element) < 0)
-                t = t.left;
-            else if (x.compareTo(t.element) > 0)
-                t = t.right;
-            else
-                return t;    // Match
-        }
-        return null;         // Not found
-    }
 
     /**
      * Internal method to compute height of a subtree.
@@ -331,20 +359,20 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
     // Test program
     public static void main(String[] args) {
         BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-        final int NUMS = 50;
+        final int NUMS = 20;
         final int GAP = 37;
 
         System.out.println("Checking... (no more output means success)");
 
         for (int i = GAP; i != 0; i = (i + GAP) % NUMS)
             bst.insert(i);
-            //bst.createPerfectBinarySearchTree(i);
+        //bst.createPerfectBinarySearchTree(i);
 
         for (int i = 1; i < NUMS; i += 2)
             bst.remove(i);
 
-        if (NUMS < 40)
-            bst.printTree();
+        //if (NUMS < 40)
+        //    bst.printTree();
         if (bst.findMin() != 2 || bst.findMax() != NUMS - 2)
             System.out.println("FindMin or FindMax error!");
 
@@ -364,6 +392,14 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>> {
         bst.postorder(bst.root);
         System.out.println("print preorder: \n");
         bst.preorder(bst.root);
+        System.out.println("print level order: \n");
+        bst.levelOrder(bst.root);
+
+        BinarySearchTree<Integer> bst2 = new BinarySearchTree<>();
+        Integer[] integerArray = new Integer[]{1, 2, 3, 4, 5, 6, 7};
+
+        bst2.createPerfectBinarySearchTree(integerArray);
+        bst2.levelOrder(bst2.root);
 
         System.out.println("path length: " + bst.internalPathLength());
     }
