@@ -6,107 +6,181 @@ import java.util.*;
 
 public class Driver {
 
-    private static int[][] board;
-    private static int startXPos;
-    private static int startYPos;
-    private static int endXPos;
-    private static int endYPos;
-    private static int knightPossibleMovesX[] = {2, 1, -1, -2, -2, -1, 1, 2};
-    private static int knightPossibleMovesY[] = {1, 2, 2, 1, -1, -2, -2, -1};
+    private int[][] board;
+    private int boardWidth;
+    private int boardHeight;
+    private int[][] boardMarked;
+    private int startXPos;
+    private int startYPos;
+    private int endXPos;
+    private int endYPos;
+    private int knightPossibleMovesX[] = {2, 1, -1, -2, -2, -1, 1, 2};
+    private int knightPossibleMovesY[] = {1, 2, 2, 1, -1, -2, -2, -1};
+    private Queue<Node> queue;
+    private int counterNodes;
+    private int height;
+
+    private Node root;
 
     public int MinimumSteps(int boardHeight, int boardWidth, int knightStartXPosition,
                             int knightStartYPosition, int knightEndXPosition, int knightEndYPosition) {
 
-        board = new int[boardWidth][boardHeight];
-        int counter = 0;
-        int[][] boardMarked = new int[boardWidth][boardHeight];
-        Tree tree = new Tree();
-        //tree.levelOrderQueue(new Node(startXPos, startYPos));
-        for (int i = 0; i < board.length; i++) {
+        board = new int[boardHeight][boardWidth];
+        this.boardWidth = boardWidth;
+        this.boardHeight = boardHeight;
+        this.startXPos = knightStartXPosition;
+        this.startYPos = knightStartYPosition;
+        this.endXPos = knightEndXPosition;
+        this.endYPos = knightEndYPosition;
+        queue = new LinkedList<>();
 
-            // Generating co-ordinate of new cell ...............
-            int new_x = knightStartXPosition + knightPossibleMovesX[i];
-            int new_y = knightStartYPosition + knightPossibleMovesY[i];
+        board[knightStartXPosition][knightStartYPosition] = 1;
+        root = new Node(knightStartXPosition, knightStartYPosition);
 
-            // If the move is valid and we have previously traversed new cell then push it into queue .........
-            if (new_x >= 0 && new_y >= 0 && new_x < boardWidth && new_y < boardHeight && board[new_x][new_y] == 0) {
-                tree.levelOrderQueue(new Node(new_x, new_y));
-                boardMarked[new_x][new_y] = 1;
-                counter++;
-            } else if (new_x == knightEndXPosition && new_y == knightEndYPosition) {
-                return counter;
+        // level order
+        root.setHeightCounter(0);
+        queue.add(root);
+        while (!queue.isEmpty()) {
+
+            Node pollnode = queue.poll();
+
+            counterNodes++;
+            System.out.println("x: " + pollnode.getX() + " Y: " + pollnode.getY());
+            findValidMoves(pollnode);
+            if (foundGoalTarget(pollnode)) {
+                System.out.println("GOAL REACHED");
+                System.out.println("Node count: " + counterNodes);
+                System.out.println("Height: " + height);
+                break;
             }
-            printTwoDimensionalArray(boardMarked);
-        }
 
+        }
 
         return -1;
     }
 
+    /*private int height(Node t) {
+        if (t == null)
+            return -1;
+        else
+            return 1 + Math.max(height(t));
+    }*/
 
-    public static void printTwoDimensionalArray(int[][] a) {
+    private boolean foundGoalTarget(Node node) {
+        if (node.getX() == endXPos && node.getY() == endYPos) {
+            return true;
+        }
+        return false;
+    }
+
+    /***
+     * Finder alle valid moves,
+     * @param node
+     */
+    public void findValidMoves(Node node) {
+        height = node.getHeightCounter();
+        for (int i = 0; i < 8; i++) {
+
+            // Nye koordinator for den næste nye valid move
+            int new_x = node.getX() + knightPossibleMovesX[i];
+            int new_y = node.getY() + knightPossibleMovesY[i];
+            // hvis move er
+            if (new_x >= 0 && new_y >= 0 && new_x < boardWidth && new_y < boardHeight && board[new_x][new_y] == 0) {
+                board[new_x][new_y] = 1;
+                Node tempNode = new Node(new_x, new_y);
+                height++;
+                // tæler et til hver højde vi tilføjer
+                tempNode.setHeightCounter(height);
+                queue.add(tempNode);
+
+                node.addChild(new Node(new_x, new_y));
+
+            }
+            //printBoard(board);
+        }
+    }
+
+    public static void printBoard(int[][] a) {
         for (int i = 0; i < a.length; i++) {
             for (int j = 0; j < a[i].length; j++) {
-                System.out.printf("%d ", a[i][j]);
+                System.out.print(a[i][j] + " ");
             }
             System.out.println();
         }
+        System.out.println("\n");
     }
 
 
     public class Tree {
         Node root;
+        Queue<Node> list = new LinkedList<>();
 
-        private Node addRecursive(Node current, int x, int y) {
-            if (current == null) {
-                return new Node(x, y);
-            }
-
-           current.parent.children.add(addRecursive(current, x, y));
-            return current;
-        }
-
-        public void add(int x, int y) {
-            root = addRecursive(root, x, y);
-        }
-
-        public void traverseLevelOrder() {
+        public void buildTree(Node node) {
             if (root == null) {
+                this.root = node;
                 return;
             }
 
-            Queue<Node> nodes = new LinkedList<>();
-            nodes.add(root);
+            list.add(node);
+            Node temp = new Node(node.x, node.y);
+            while (!list.isEmpty()) {
 
-            while (!nodes.isEmpty()) {
 
-                Node node = nodes.remove();
-
-                System.out.print(" " + node.value);
-
-                if (node.left != null) {
-                    nodes.add(node.left);
-                }
-
-                if (node.right != null) {
-                    nodes.add(node.right);
+                if (list.size() == 8) {
+                    node.addChild(list.poll());
                 }
             }
         }
+
+        public Node getRoot() {
+            return root;
+        }
     }
-
-
 
     class Node {
         private int x;
         private int y;
         private List<Node> children;
-        private Node parent;
+        private int heightCounter = 0;
+
 
         public Node(int x, int y) {
             this.x = x;
             this.y = y;
             this.children = new ArrayList<Node>();
         }
+
+        public int getHeightCounter() {
+            return heightCounter;
+        }
+
+        public void setHeightCounter(int heightCounter) {
+            this.heightCounter = heightCounter;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+
+        public void addChild(Node newChild) {
+            children.add(newChild);
+        }
+
+        public List<Node> getChildren() {
+            return children;
+        }
     }
 }
+
