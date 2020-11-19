@@ -23,7 +23,7 @@ public class Driver {
     public int MinimumSteps(int boardHeight, int boardWidth, int knightStartXPosition,
                             int knightStartYPosition, int knightEndXPosition, int knightEndYPosition) {
 
-        board = new int[boardHeight][boardWidth];
+        board = new int[boardWidth][boardHeight];
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         this.startXPos = knightStartXPosition;
@@ -31,7 +31,7 @@ public class Driver {
         this.endXPos = knightEndXPosition;
         this.endYPos = knightEndYPosition;
         counterNodes = 0;
-        queue = new LinkedList<>();
+        queue = new LinkedList<>(); // Tree intepretation
 
         board[knightStartXPosition][knightStartYPosition] = 1;
         root = new Node(knightStartXPosition, knightStartYPosition);
@@ -51,6 +51,7 @@ public class Driver {
             findValidMoves(pollnode);
 
             if (foundGoalTarget(pollnode)) {
+                //printBoard(board);
                 System.out.println("GOAL REACHED");
                 System.out.println("Node count: " + counterNodes);
                 System.out.println("Height: " + height);
@@ -59,15 +60,9 @@ public class Driver {
         }
     }
 
-    /*private int height(Node t) {
-        if (t == null)
-            return -1;
-        else
-            return 1 + Math.max(height(t));
-    }*/
-
     private boolean foundGoalTarget(Node node) {
         if (node.getX() == endXPos && node.getY() == endYPos) {
+            board[endXPos][endYPos] = 2;
             return true;
         }
         return false;
@@ -83,22 +78,22 @@ public class Driver {
             height = node.getHeightCounter();
 
             // Nye koordinator for den næste nye valid move
-            int new_x = node.getX() + knightPossibleMovesX[i];
-            int new_y = node.getY() + knightPossibleMovesY[i];
-            // hvis move er
-            if (new_x >= 0 && new_y >= 0 && new_x < boardWidth && new_y < boardHeight && board[new_x][new_y] == 0) {
-                board[new_x][new_y] = 1;
+            int newX = node.getX() + knightPossibleMovesX[i];
+            int newY = node.getY() + knightPossibleMovesY[i];
 
-                Node tempNode = new Node(new_x, new_y);
+            // hvis moves er valid, marker dem på board,
+            //
+            if (newX >= 0 && newY >= 0 && newX < boardWidth && newY < boardHeight && board[newX][newY] == 0) {
+                board[newX][newY] = 1;
+
+                Node tempNode = new Node(newX, newY);
                 counterNodes++;
                 height++;
-                // tæler et til hver højde vi tilføjer
+                // tæller et til hver højde vi tilføjer
                 tempNode.setHeightCounter(height);
                 queue.add(tempNode);
 
-                node.addChild(new Node(new_x, new_y));
-
-
+                node.addChild(new Node(newX, newY));
             }
             //printBoard(board);
         }
