@@ -1,4 +1,4 @@
-package lecture_7_trees;
+package lecture_7_8_trees;
 // AvlTree class
 //
 // CONSTRUCTION: with no initializer

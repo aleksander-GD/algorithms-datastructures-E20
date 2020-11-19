@@ -1,7 +1,5 @@
 package mandatory_assignments.assignment2;
 
-import lecture_7_trees.BinarySearchTree;
-
 import java.util.*;
 
 public class Driver {
@@ -32,31 +30,33 @@ public class Driver {
         this.startYPos = knightStartYPosition;
         this.endXPos = knightEndXPosition;
         this.endYPos = knightEndYPosition;
+        counterNodes = 0;
         queue = new LinkedList<>();
 
         board[knightStartXPosition][knightStartYPosition] = 1;
         root = new Node(knightStartXPosition, knightStartYPosition);
-
-        // level order
         root.setHeightCounter(0);
+        // level order
+        levelOrder(root);
+
+        return -1;
+    }
+
+    public void levelOrder(Node root) {
         queue.add(root);
         while (!queue.isEmpty()) {
 
             Node pollnode = queue.poll();
-
-            counterNodes++;
             System.out.println("x: " + pollnode.getX() + " Y: " + pollnode.getY());
             findValidMoves(pollnode);
+
             if (foundGoalTarget(pollnode)) {
                 System.out.println("GOAL REACHED");
                 System.out.println("Node count: " + counterNodes);
                 System.out.println("Height: " + height);
                 break;
             }
-
         }
-
-        return -1;
     }
 
     /*private int height(Node t) {
@@ -78,8 +78,9 @@ public class Driver {
      * @param node
      */
     public void findValidMoves(Node node) {
-        height = node.getHeightCounter();
+
         for (int i = 0; i < 8; i++) {
+            height = node.getHeightCounter();
 
             // Nye koordinator for den næste nye valid move
             int new_x = node.getX() + knightPossibleMovesX[i];
@@ -87,13 +88,16 @@ public class Driver {
             // hvis move er
             if (new_x >= 0 && new_y >= 0 && new_x < boardWidth && new_y < boardHeight && board[new_x][new_y] == 0) {
                 board[new_x][new_y] = 1;
+
                 Node tempNode = new Node(new_x, new_y);
+                counterNodes++;
                 height++;
                 // tæler et til hver højde vi tilføjer
                 tempNode.setHeightCounter(height);
                 queue.add(tempNode);
 
                 node.addChild(new Node(new_x, new_y));
+
 
             }
             //printBoard(board);
@@ -108,33 +112,6 @@ public class Driver {
             System.out.println();
         }
         System.out.println("\n");
-    }
-
-
-    public class Tree {
-        Node root;
-        Queue<Node> list = new LinkedList<>();
-
-        public void buildTree(Node node) {
-            if (root == null) {
-                this.root = node;
-                return;
-            }
-
-            list.add(node);
-            Node temp = new Node(node.x, node.y);
-            while (!list.isEmpty()) {
-
-
-                if (list.size() == 8) {
-                    node.addChild(list.poll());
-                }
-            }
-        }
-
-        public Node getRoot() {
-            return root;
-        }
     }
 
     class Node {
