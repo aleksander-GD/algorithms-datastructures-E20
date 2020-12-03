@@ -3,6 +3,18 @@ home = setwd(Sys.getenv("HOME"));
 fpath = file.path(home);
 setwd(fpath)
 
+dataNLogNAverage <- read.csv(file = 'test.csv')
+
+head(dataNLogNAverage)
+names(dataNLogNAverage)[names(dataNLogNAverage) == "X10000"] <- "N"
+names(dataNLogNAverage)[names(dataNLogNAverage) == "X1820000"] <- "counts"
+head(dataNLogNAverage)
+
+
+plot(x=dataNLogNAverage$N, y=dataNLogNAverage$counts, type = "l", xlab = "N size", ylab = "count average", col="blue")
+reg <- lm(counts~N, data = dataNLogNAverage)
+legend("topleft",c("counter"),fill=c("blue"))
+
 dataNLogNAverage <- read.csv(file = 'dataNLogNAverage.csv')
 
 head(dataNLogNAverage)
