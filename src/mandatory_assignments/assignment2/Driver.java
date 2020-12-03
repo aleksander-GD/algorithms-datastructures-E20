@@ -1,73 +1,71 @@
 package mandatory_assignments.assignment2;
 
-import lecture_7_trees.BinarySearchTree;
-
 import java.util.*;
 
 public class Driver {
 
-    private int[][] board;
-    private int boardWidth;
-    private int boardHeight;
-    private int[][] boardMarked;
-    private int startXPos;
-    private int startYPos;
-    private int endXPos;
-    private int endYPos;
-    private int knightPossibleMovesX[] = {2, 1, -1, -2, -2, -1, 1, 2};
-    private int knightPossibleMovesY[] = {1, 2, 2, 1, -1, -2, -2, -1};
-    private Queue<Node> queue;
-    private int counterNodes;
-    private int height;
+    private static int[][] board;
+    private static int boardX;
+    private static int boardY;
+    private static int startXPos;
+    private static int startYPos;
+    private static int endXPos;
+    private static int endYPos;
+    private static int knightPossibleMovesX[] = {2, 1, -1, -2, -2, -1, 1, 2};
+    private static int knightPossibleMovesY[] = {1, 2, 2, 1, -1, -2, -2, -1};
+    private static Queue<Node> queue;
+    private static int counterNodes;
+    private static int height;
+    private static Node root;
+    private static Tree tree;
 
-    private Node root;
+    public static int MinimumSteps(int boardHeight, int boardWidth, int knightStartXPosition,
+                                   int knightStartYPosition, int knightEndXPosition, int knightEndYPosition) {
 
-    public int MinimumSteps(int boardHeight, int boardWidth, int knightStartXPosition,
-                            int knightStartYPosition, int knightEndXPosition, int knightEndYPosition) {
+        board = new int[boardWidth][boardHeight];
+        boardX = boardWidth;
+        boardY = boardHeight;
+        startXPos = knightStartXPosition;
+        startYPos = knightStartYPosition;
+        endXPos = knightEndXPosition;
+        endYPos = knightEndYPosition;
 
-        board = new int[boardHeight][boardWidth];
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
-        this.startXPos = knightStartXPosition;
-        this.startYPos = knightStartYPosition;
-        this.endXPos = knightEndXPosition;
-        this.endYPos = knightEndYPosition;
-        queue = new LinkedList<>();
+        counterNodes = 0;
+        queue = new LinkedList<>(); // Tree intepretation
 
-        board[knightStartXPosition][knightStartYPosition] = 1;
-        root = new Node(knightStartXPosition, knightStartYPosition);
-
-        // level order
+        board[startXPos][startYPos] = 1;
+        root = new Node(startXPos, startYPos);
         root.setHeightCounter(0);
+        tree = new Tree();
+        tree.insert(startXPos, startYPos);
+        // level order
+        int h = levelOrder(root);
+
+        return h;
+    }
+
+    public static int levelOrder(Node root) {
         queue.add(root);
         while (!queue.isEmpty()) {
 
             Node pollnode = queue.poll();
-
-            counterNodes++;
             System.out.println("x: " + pollnode.getX() + " Y: " + pollnode.getY());
             findValidMoves(pollnode);
+
             if (foundGoalTarget(pollnode)) {
+                //printBoard(board);
                 System.out.println("GOAL REACHED");
                 System.out.println("Node count: " + counterNodes);
                 System.out.println("Height: " + height);
                 break;
             }
-
         }
-
-        return -1;
+        return height;
     }
 
-    /*private int height(Node t) {
-        if (t == null)
-            return -1;
-        else
-            return 1 + Math.max(height(t));
-    }*/
-
-    private boolean foundGoalTarget(Node node) {
+    private static boolean foundGoalTarget(Node node) {
         if (node.getX() == endXPos && node.getY() == endYPos) {
+            board[endXPos][endYPos] = 2;
             return true;
         }
         return false;
@@ -77,24 +75,28 @@ public class Driver {
      * Finder alle valid moves,
      * @param node
      */
-    public void findValidMoves(Node node) {
-        height = node.getHeightCounter();
+    public static void findValidMoves(Node node) {
         for (int i = 0; i < 8; i++) {
+            height = node.getHeightCounter();
 
             // Nye koordinator for den næste nye valid move
-            int new_x = node.getX() + knightPossibleMovesX[i];
-            int new_y = node.getY() + knightPossibleMovesY[i];
-            // hvis move er
-            if (new_x >= 0 && new_y >= 0 && new_x < boardWidth && new_y < boardHeight && board[new_x][new_y] == 0) {
-                board[new_x][new_y] = 1;
-                Node tempNode = new Node(new_x, new_y);
+            int newX = node.getX() + knightPossibleMovesX[i];
+            int newY = node.getY() + knightPossibleMovesY[i];
+
+            // hvis moves er valid, marker dem på board,
+            //
+            if (newX >= 0 && newY >= 0 && newX < boardX && newY < boardY && board[newX][newY] == 0) {
+                board[newX][newY] = 1;
+                Node tempNode = new Node(newX, newY);
+
+                counterNodes++;
                 height++;
-                // tæler et til hver højde vi tilføjer
+
+                // tæller et til hver højde vi tilføjer
                 tempNode.setHeightCounter(height);
                 queue.add(tempNode);
 
-                node.addChild(new Node(new_x, new_y));
-
+                node.addChild(new Node(newX, newY));
             }
             //printBoard(board);
         }
@@ -110,34 +112,7 @@ public class Driver {
         System.out.println("\n");
     }
 
-
-    public class Tree {
-        Node root;
-        Queue<Node> list = new LinkedList<>();
-
-        public void buildTree(Node node) {
-            if (root == null) {
-                this.root = node;
-                return;
-            }
-
-            list.add(node);
-            Node temp = new Node(node.x, node.y);
-            while (!list.isEmpty()) {
-
-
-                if (list.size() == 8) {
-                    node.addChild(list.poll());
-                }
-            }
-        }
-
-        public Node getRoot() {
-            return root;
-        }
-    }
-
-    class Node {
+    static class Node {
         private int x;
         private int y;
         private List<Node> children;
@@ -180,6 +155,20 @@ public class Driver {
 
         public List<Node> getChildren() {
             return children;
+        }
+    }
+
+    static class Tree {
+        private Node root;
+
+        public Node insert(Node node, int x, int y) {
+            if (node == null) {
+                return new Node(x, y);
+            }
+            return node = insert(node, x, y);
+        }
+        public void insert(int x, int y) {
+            root = insert(root, x, y);
         }
     }
 }

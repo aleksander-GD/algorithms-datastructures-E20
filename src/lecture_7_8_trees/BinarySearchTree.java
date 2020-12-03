@@ -1,4 +1,4 @@
-package lecture_7_trees;
+package lecture_7_8_trees;
 // BinarySearchTree class
 //
 // CONSTRUCTION: with no initializer
@@ -15,9 +15,6 @@ package lecture_7_trees;
 // ******************ERRORS********************************
 // Throws UnderflowException as appropriate
 
-import org.omg.CORBA.Any;
-
-import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 
