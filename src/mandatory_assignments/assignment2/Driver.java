@@ -63,8 +63,10 @@ public class Driver {
         return height;
     }
 
+
     private static boolean foundGoalTarget(Node node) {
         if (node.getX() == endXPos && node.getY() == endYPos) {
+            
             board[endXPos][endYPos] = 2;
             return true;
         }
