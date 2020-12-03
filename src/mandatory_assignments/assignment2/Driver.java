@@ -59,6 +59,7 @@ public class Driver {
                 System.out.println("Height: " + height);
                 break;
             }
+            //printBoard(board);
         }
         return height;
     }
@@ -81,6 +82,8 @@ public class Driver {
         for (int i = 0; i < 8; i++) {
             height = node.getHeightCounter();
 
+        for (int i = 0; i < 8; i++) {
+            height = node.getHeightCounter();
             // Nye koordinator for den næste nye valid move
             int newX = node.getX() + knightPossibleMovesX[i];
             int newY = node.getY() + knightPossibleMovesY[i];
@@ -100,7 +103,7 @@ public class Driver {
 
                 node.addChild(new Node(newX, newY));
             }
-            //printBoard(board);
+
         }
     }
 
