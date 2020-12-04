@@ -86,15 +86,14 @@ public class ExamTestFile {
         Queue<Integer> chain = new LinkedList();
         chain.add(n);
 
-        int num = n;
-        while (num != 1) {
-            if (num % 2 == 1) {
-                num = num * 3 + 1;
-                chain.add(num);
+        while (n != 1) {
+            if (n % 2 == 1) {
+                n = n * 3 + 1;
+                chain.add(n);
             }
-            if ((num % 2) == 0) {
-                num = num / 2;
-                chain.add(num);
+            if ((n % 2) == 0) {
+                n = n / 2;
+                chain.add(n);
             }
         }
 

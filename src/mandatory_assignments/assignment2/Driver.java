@@ -49,14 +49,14 @@ public class Driver {
         while (!queue.isEmpty()) {
 
             Node pollnode = queue.poll();
-            System.out.println("x: " + pollnode.getX() + " Y: " + pollnode.getY());
+            //System.out.println("x: " + pollnode.getX() + " Y: " + pollnode.getY());
             findValidMoves(pollnode);
 
             if (foundGoalTarget(pollnode)) {
                 //printBoard(board);
-                System.out.println("GOAL REACHED");
-                System.out.println("Node count: " + counterNodes);
-                System.out.println("Height: " + height);
+                //System.out.println("GOAL REACHED");
+                //System.out.println("Node count: " + counterNodes);
+                //System.out.println("Height: " + height);
                 break;
             }
         }
@@ -67,7 +67,7 @@ public class Driver {
     private static boolean foundGoalTarget(Node node) {
         if (node.getX() == endXPos && node.getY() == endYPos) {
 
-            board[endXPos][endYPos] = 2;
+            board[endXPos][endYPos] = 1;
             return true;
         }
         return false;
@@ -82,8 +82,8 @@ public class Driver {
             height = node.getHeightCounter();
 
             // Nye koordinator for den næste nye valid move
-            int newX = node.getX() + knightPossibleMovesX[i];
-            int newY = node.getY() + knightPossibleMovesY[i];
+            int newX = knightPossibleMovesX[i] + node.getX();
+            int newY = knightPossibleMovesY[i] + node.getY();
 
             // hvis moves er valid, marker dem på board,
             //
@@ -96,6 +96,7 @@ public class Driver {
 
                 // tæller et til hver højde vi tilføjer
                 tempNode.setHeightCounter(height);
+                height = tempNode.getHeightCounter() - 1;
                 queue.add(tempNode);
 
                 node.addChild(new Node(newX, newY));
@@ -169,6 +170,7 @@ public class Driver {
             }
             return node = insert(node, x, y);
         }
+
         public void insert(int x, int y) {
             root = insert(root, x, y);
         }
