@@ -1,10 +1,8 @@
-package examtest;
+package examtest1;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
-public class ExamTestFile {
+public class ExamTestFile1 {
     static int counter = 0;
     static int length = 0;
 
@@ -40,6 +38,8 @@ public class ExamTestFile {
 
         System.out.println(checkForLongestChain(13));
         System.out.println(addCountChain(13));
+
+        System.out.println(pythTriplet(1000));
     }
 
     static long myMethod(int N) {
@@ -101,5 +101,28 @@ public class ExamTestFile {
         return chain.size();
     }
 
+    static int pythTriplet(int n) {
+        /*
+        b = a;
+        if a, b (a <= b) and c are the Pythagorean triplet,
+        then b, a (b >= a) and c - also the solution, so we can search only one case
+        c = 1000 - a - b; It's one of the conditions of the problem (we don't need to scan all possible 'c': just calculate it)
+         */
+        int sum = n;
+        int triplet = 0;
+        int a;
+        for (a = 1; a <= sum / 3; a++) {
+            int b;
+            for (b = a + 1; b <= sum / 2; b++) {
+                int c = sum - a - b;
+                if (a * a + b * b == c * c) {
+                    //System.out.println(a + " " + b + " " + c + "   " + a * b * c);
+                    triplet = a * b * c;
+                }
+
+            }
+        }
+        return triplet;
+    }
 
 }
