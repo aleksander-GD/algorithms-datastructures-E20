@@ -55,39 +55,6 @@ public class ExamTestFile2 {
         return count;
     }
 
-    static int count = 0;
-
-    static void loop1(int n) {
-        for (int i = 1; i < n; i++) {
-            int j = 1;
-            count++;
-            while (j < i) {
-                j = 2 * j;
-                count++;
-            }
-        }
-
-    }
-
-    public static int log2(int N) {
-        // calculate log2 N indirectly
-        // using log() method
-        int result = (int) (Math.log(N) / Math.log(2));
-
-        return result;
-    }
-
-    /*
-    Please be aware that there is a risk of mis-calculation due to imprecise floating-point arithmetic,
-    as explained in this stackoverflow post.
-    To completely get rid of errors, add an epsilon between 1e-11 and 1e-14 as shown below.
-     */
-
-    public static int log2Precise(int N)
-    {
-        return (int) (Math.log(N) / Math.log(2) + 1e-10);
-    }
-
     public static void main(String[] args) {
         int[] numberArray = {7, 4, 1, 3, 5, 6, 4, 8};
         System.out.println(getNumberEqual(numberArray, numberArray.length, 4));
@@ -96,8 +63,6 @@ public class ExamTestFile2 {
         String text = "The cattle were running back and forth, but there was no wolf to be seen, heard or smelled, so the shepherd decided to take a little nap in a bed of grass and early summer flowers. Soon he was awakened by a sound he had never heard before.";
         System.out.println(countWordOccurence(text, "flowers"));
 
-        loop1(1024);
-        System.out.println(count + "\n Calculated: " + log2(1024) * 1024);
 
     }
 }
