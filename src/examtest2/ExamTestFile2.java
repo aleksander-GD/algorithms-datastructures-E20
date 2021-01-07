@@ -1,7 +1,6 @@
 package examtest2;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class ExamTestFile2 {
 
@@ -55,14 +54,30 @@ public class ExamTestFile2 {
         return count;
     }
 
+    static String countWordOccurenceCorrectVersion(String text) {
+        text = text.replaceAll("[.,]", "");           // O(1)
+        String[] words = text.toLowerCase().split(" ");                // O(1)
+        TreeMap<String, Integer> mapWordOccurences = new TreeMap<>();       // O(1)
+        int count = 0;
+        for (int i = 0; i < words.length; i++) {    // O(n)
+            if (!mapWordOccurences.containsKey(words[i])) {
+                mapWordOccurences.put(words[i], 1); // O(log(N)) for put
+            } else {
+                mapWordOccurences.replace(words[i], count = 1 + mapWordOccurences.get(words[i]));   // O(log(N)) for get
+            }
+        }
+        return Collections.max(mapWordOccurences.entrySet(), Map.Entry.comparingByValue()).getKey(); // O(log(N)) for get
+    }
+
     public static void main(String[] args) {
         int[] numberArray = {7, 4, 1, 3, 5, 6, 4, 8};
         System.out.println(getNumberEqual(numberArray, numberArray.length, 4));
         PriorityQueue<Integer> pq = new PriorityQueue<>();
 
         String text = "The cattle were running back and forth, but there was no wolf to be seen, heard or smelled, so the shepherd decided to take a little nap in a bed of grass and early summer flowers. Soon he was awakened by a sound he had never heard before.";
-        System.out.println(countWordOccurence(text, "flowers"));
+        //System.out.println(countWordOccurence(text, "flowers"));
 
 
+        System.out.println(countWordOccurenceCorrectVersion(text));
     }
 }

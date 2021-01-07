@@ -150,6 +150,24 @@ public class Analysis {
         }
     }
 
+    static void loop13(int N) {
+        int x = 0;
+        for (int i = 1; i <= N; i++) {
+            i = i * 2;
+
+            for (int j = 1; j <= N; j++) {
+                for (int k = 1; k <= N; ) {
+                    x++;
+                    k *= 2;
+                    count++;
+                }
+                count++;
+            }
+            count++;
+        }
+
+    }
+
     public static void resetCount() {
         count = 0;
     }
@@ -222,6 +240,10 @@ public class Analysis {
         loop12(1024);
         System.out.println(count + "\n Calculated: " + Math.pow(1024, 2) * log2(1024));
 
+        resetCount();
+        loop13(1024);
+        System.out.println(count + "\n Calculated N*log(N^2): " + 1024 * log2((int) Math.pow(1024, 2)));
+        System.out.println(count + "\n Calculated N*log(N)^2: " + 1024 * Math.pow(log2(1024), 2));
         /*
         Plus, the converter will accept either scientific or E notation (E or e represents "x 10^"):
         3.5E4

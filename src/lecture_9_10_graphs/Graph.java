@@ -39,7 +39,7 @@ public class Graph {
             vertex = q.poll();
             //(vertex -> u)
             for (Vertex u : graph.adj_list.get(vertex)) {
-                // Hvis første vertex u er først gang blevet
+                // Hvis første vertex u er først gang blevet fundet
                 if (!discovered[u.value]) {
                     discovered[u.value] = true; // Marker vertex som fundet
                     level[u.value] = level[vertex] + 1;  // set level som level af parent node + 1
